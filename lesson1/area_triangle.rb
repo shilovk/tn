@@ -1,18 +1,17 @@
-=begin
-Площадь треугольника. Площадь треугольника можно вычислить, зная его основание (a) и высоту (h) по формуле: 1/2*a*h. Программа должна запрашивать основание и высоту треугольника и возвращать его площадь.
-=end
+# Площадь треугольника. Площадь треугольника можно вычислить, зная его основание (a) и высоту (h) по формуле: 1/2*a*h. Программа должна запрашивать основание и высоту треугольника и возвращать его площадь.
 
 class Triangle
-  attr_writer :a, :h
+  def initialize
+    puts 'Please, enter base of triangle:'
+    @a = gets.to_f
+    puts 'Please, enter height of triangle:'
+    @h = gets.to_f
+  end
 
   def square
-    (1.to_f/2.to_f)*@a.to_f*@h.to_f
+    0.5 * @a * @h
   end
 end
 
 triangle = Triangle.new
-puts 'Please, enter base of triangle:'
-triangle.a = gets
-puts 'Please, enter height of triangle:'
-triangle.h = gets
 puts "The square of the triangle is #{triangle.square}"
