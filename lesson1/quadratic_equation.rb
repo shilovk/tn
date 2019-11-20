@@ -5,9 +5,7 @@
 # Подсказка: Алгоритм решения с блок-схемой (www.bolshoyvopros.ru). Для вычисления квадратного корня, нужно использовать Math.sqrt
 
 class Equation
-  attr_reader :discriminant
-
-  def initialize 
+  def initialize
     puts 'Please, enter three coefficients for equation:'
     @a = gets.to_f
     @b = gets.to_f
@@ -19,10 +17,10 @@ class Equation
   end
 
   def calc_roots
-    if @d > 0
+    if @d.positive?
       puts "x1 = #{x1}"
       puts "x2 = #{x2}"
-    elsif @d == 0
+    elsif @d.zero?
       puts "x1 = #{x1}"
     else
       'No roots'
@@ -30,15 +28,14 @@ class Equation
   end
 
   def x1
-    (-@b + Math.sqrt(@d))/(2.to_f * @a)
+    (-@b + Math.sqrt(@d)) / (2.to_f * @a)
   end
 
   def x2
-    (-@b - Math.sqrt(@d))/(2.to_f * @a)
+    (-@b - Math.sqrt(@d)) / (2.to_f * @a)
   end
 end
 
 equation = Equation.new
 puts "Discriminant = #{equation.discriminant}"
 puts equation.calc_roots
-

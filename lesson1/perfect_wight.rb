@@ -15,7 +15,7 @@ class Human
   end
 
   def diagnosis_weight(value)
-    puts('Ваш вес уже оптимальный') if value < 0
+    puts('Ваш вес уже оптимальный') if value.negative?
   end
 end
 

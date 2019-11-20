@@ -4,14 +4,14 @@ class Triangle
   def initialize
     puts 'Please, enter three sides of the triangle:'
     @sides = [gets.to_f, gets.to_f, gets.to_f].sort
-    @side1 = @sides[0]
-    @side2 = @sides[1]
-    @hypotenuse = @sides[2]
-    @number_equal_sides = @sides.uniq.map{ |el| @sides.count(el) }.max
   end
 
   def self.start
     triangle = Triangle.new
+    @side1 = @sides[0]
+    @side2 = @sides[1]
+    @hypotenuse = @sides[2]
+    @number_equal_sides = @sides.uniq.map { |el| @sides.count(el) }.max
     triangle.rectangular
     triangle.isosceles
     triangle.equilateral
@@ -31,6 +31,7 @@ class Triangle
 
   def rectangular
     return false if equilateral?
+
     puts 'The triangle is rectangular.' if rectangular?
   end
 
@@ -39,7 +40,7 @@ class Triangle
   end
 
   def equilateral
-    puts 'The triangle is equilateral' if equilateral? 
+    puts 'The triangle is equilateral' if equilateral?
   end
 end
 

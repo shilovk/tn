@@ -1,6 +1,6 @@
 class Sample
   def hello
-    puts "Hello, World!"
+    puts 'Hello, World!'
   end
 end
 
@@ -23,6 +23,6 @@ end
 
 student = Student.new
 puts 'What is your name?'
-student.first_name = gets.chomp 
+student.first_name = gets.chomp
 student.introduction('Katrina')
 puts student.favorite_number
