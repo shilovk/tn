@@ -28,11 +28,11 @@ class Equation
   end
 
   def x1
-    (-@b + Math.sqrt(@d)) / (2.to_f * @a)
+    (-@b + Math.sqrt(@d))/(2.to_f * @a)
   end
 
   def x2
-    (-@b - Math.sqrt(@d)) / (2.to_f * @a)
+    (-@b - Math.sqrt(@d))/(2.to_f * @a)
   end
 end
 
