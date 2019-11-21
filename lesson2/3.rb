@@ -1,8 +1,14 @@
 # 3. Заполнить массив числами фибоначчи до 100 
 
-def fibonachi(number)
+def fibonachi(max_value)
   fib = [0, 1]
-  (2..number).each { |n| fib[n] = fib[n-1] + fib[n-2] }
+  n = 2
+  loop do
+    value = fib[n-1] + fib[n-2]
+    break if value > max_value
+    fib[n] = value
+    n += 1
+  end
   fib
 end
 
