@@ -6,4 +6,4 @@ def fibonachi(number)
   fib
 end
 
-puts fibonachi(10)
+puts fibonachi(100)

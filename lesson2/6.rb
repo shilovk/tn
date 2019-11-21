@@ -4,6 +4,7 @@
 
 
 class Order
+  attr_reader :basket
   def initialize
     @basket = Hash.new('empty busket')
     loop do
@@ -14,13 +15,14 @@ class Order
       price = gets.chomp.to_i
       puts 'count:'
       count = gets.chomp.to_f
-      @basket[title] = [ { price => count } , price * count]
+      @basket[title] = {price => count}
     end
   end
 
   def total
-    @basket.inject(0) do |sums, (el, (val, sum))|
-      puts "#{el} => #{val} = #{sum}"
+    @basket.inject(0) do |sums, (title, el)|
+      sum = el.keys[0] * el.values[0]
+      puts "#{title} => #{el} = #{sum}"
       sums += sum
     end
   end

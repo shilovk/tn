@@ -2,7 +2,6 @@
 
 def vowel?(letter)
   'aeiou'.include?(letter)
-  
 end
 
 vowels = ('a'..'z').each_with_index.inject( {} ) do |memo, (letter, i)|
