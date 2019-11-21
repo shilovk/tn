@@ -6,7 +6,7 @@ def fibonachi(max_value)
   loop do
     value = fib[n-1] + fib[n-2]
     break if value >= max_value
-    fib[n] = value
+    fib << value
     n += 1
   end
   fib
