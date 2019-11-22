@@ -1,6 +1,6 @@
 # 1. Сделать хеш, содеращий месяцы и количество дней в месяце. В цикле выводить те месяцы, у которых количество дней ровно 30
 
-require 'Date'
+require 'date'
 
 def days_in_month(month)
   Date.new(Date.today.year, month, -1).day
