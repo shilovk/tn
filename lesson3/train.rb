@@ -43,6 +43,6 @@ class Train
   end
 
   def self.get_types_of_trains(trains)
-    trains.each_with_object(Hash.new(0)) { |train, memo| memo[TRAIN_TYPES[train.type]] += 1 }
+    trains.inject(Hash.new(0)) { |memo, train| memo[TRAIN_TYPES[train.type]] += 1; memo }
   end
 end
