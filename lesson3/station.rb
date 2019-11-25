@@ -16,8 +16,8 @@ class Station
     end
   end
 
-  def show_types_of_trains
-    puts "Trains by type: #{Train.get_types_of_trains(self.trains)}"
+  def show_trains_by_type(type_of_train)
+    puts "Trains by type '#{type_of_train}': #{Train.get_trains_by_type(self.trains, type_of_train).count}"
   end
 
   def send_train(train)

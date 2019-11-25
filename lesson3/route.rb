@@ -16,12 +16,12 @@ class Route
     puts self.interim
   end
 
-  def array_of_stations
-    [self.from].concat(self.interim).concat([self.to])
+  def stations
+    [from, interim, to].flatten
   end
 
-  def show_array_of_stations
-    array_of_stations.join(', ')
+  def show_stations
+    puts [stations].join(', ')
   end
 
   def get_actual_station_by(direction = nil, actual_station = nil)
@@ -48,17 +48,24 @@ class Route
   end
 
   def find_actual_station(step = 0, old_station)
-    array_of_stations[index_of_station(old_station) + step]
+    stations[index_of_station(old_station) + step]
   end
 
   def index_of_station(station)
-    array_of_stations.index(station)
+    stations.index(station)
+  end
+
+  def get_back_station(actual_station)
+    i = index_of_station(actual_station)
+    back_station = is_from?(actual_station) ? 'none' : stations[i - 1]
+  end
+
+  def get_next_station(actual_station)
+    i = index_of_station(actual_station)
+    next_station = is_to?(actual_station) ? 'none' : stations[i + 1]
   end
 
   def get_three_stations(actual_station)
-    i = index_of_station(actual_station)
-    back_station = is_from?(actual_station) ? 'none' : array_of_stations[i - 1]
-    next_station = is_to?(actual_station) ? 'none' : array_of_stations[i + 1]
-    [back_station, actual_station, next_station]
+    [get_back_station(actual_station), actual_station, get_next_station(actual_station)]
   end
 end

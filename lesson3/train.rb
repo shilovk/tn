@@ -18,14 +18,13 @@ class Train
     @speed = 0
   end
 
-  def move_coach(operation)
+  def add_coach
+    @coach_count += 1 if self.speed.zero?
+  end
+
+  def remove_coach
     if self.speed.zero?
-      case operation
-      when 'add'
-        @coach_count += 1
-      when 'remove'
-        @coach_count -= 1 unless self.coach_count.zero?
-      end
+      @coach_count -= 1 unless self.coach_count.zero?
     end
   end
 
@@ -42,7 +41,7 @@ class Train
     @route.get_three_stations(@actual_station)
   end
 
-  def self.get_types_of_trains(trains)
-    trains.inject(Hash.new(0)) { |memo, train| memo[TRAIN_TYPES[train.type]] += 1; memo }
+  def self.get_trains_by_type(trains, type_of_train)
+    trains.each_with_object([]) { |train, memo| memo << train if train.type == TRAIN_TYPES.index(type_of_train) }
   end
 end
