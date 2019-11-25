@@ -42,6 +42,6 @@ class Train
   end
 
   def self.get_trains_by_type(trains, type_of_train)
-    trains.each_with_object([]) { |train, memo| memo << train if train.type == TRAIN_TYPES.index(type_of_train) }
+    trains.select { |train| train.type == TRAIN_TYPES.index(type_of_train) }
   end
 end
