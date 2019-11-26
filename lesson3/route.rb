@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Route
 class Route
   attr_reader :from, :interim, :to
 
@@ -12,7 +15,9 @@ class Route
   end
 
   def remove_interim(interim)
-    self.interim.delete(interim) #if self.interim.include? interim
+    return unless self.interim.include?(interim)
+
+    self.interim.delete(interim)
     puts self.interim
   end
 
@@ -24,30 +29,28 @@ class Route
     puts [stations].join(', ')
   end
 
-  def get_actual_station_by(direction = nil, actual_station = nil)
-    if actual_station.nil?
-      self.from
+  def actual_station_by(direction = nil, actual_station = nil)
+    return from if actual_station.nil?
+
+    case direction
+    when 'next'
+      to?(actual_station) ? to : find_actual_station(actual_station, 1)
+    when 'back'
+      from?(actual_station) ? from : find_actual_station(actual_station, -1)
     else
-      case direction
-      when 'next'
-        is_to?(actual_station) ? self.to : find_actual_station(1, actual_station)
-      when 'back'
-        is_from?(actual_station) ? self.from : find_actual_station(-1, actual_station)
-      else
-        actual_station
-      end
+      actual_station
     end
   end
 
-  def is_from?(station)
-    station == self.from
+  def from?(station)
+    station == from
   end
 
-  def is_to?(station)
-    station == self.to
+  def to?(station)
+    station == to
   end
 
-  def find_actual_station(step = 0, old_station)
+  def find_actual_station(old_station, step = 0)
     stations[index_of_station(old_station) + step]
   end
 
@@ -55,17 +58,17 @@ class Route
     stations.index(station)
   end
 
-  def get_back_station(actual_station)
+  def back_station(actual_station)
     i = index_of_station(actual_station)
-    back_station = is_from?(actual_station) ? 'none' : stations[i - 1]
+    from?(actual_station) ? 'none' : stations[i - 1]
   end
 
-  def get_next_station(actual_station)
+  def next_station(actual_station)
     i = index_of_station(actual_station)
-    next_station = is_to?(actual_station) ? 'none' : stations[i + 1]
+    to?(actual_station) ? 'none' : stations[i + 1]
   end
 
-  def get_three_stations(actual_station)
-    [get_back_station(actual_station), actual_station, get_next_station(actual_station)]
+  def three_stations(actual_station)
+    [back_station(actual_station), actual_station, next_station(actual_station)]
   end
 end

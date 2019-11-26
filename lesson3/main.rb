@@ -1,41 +1,108 @@
-load 'station.rb'
-load 'route.rb'
-load 'train.rb'
+# frozen_string_literal: true
 
-my_station1 = Station.new('Moscow')
-my_train1 = Train.new('Strij', 'passenger', 11)
-my_station1.add_train(my_train1)
-my_train2 = Train.new('Volga', 'passenger', 7)
-my_station1.add_train(my_train2)
-my_train3 = Train.new('Loocoil', 'freight', 58)
-my_station1.add_train(my_train3)
-puts my_station1.trains
-my_station1.show_trains_by_type('passenger')
-my_station1.send_train(my_train2)
-puts my_station1.trains
+require 'pry'
+require_relative 'station'
+require_relative 'route'
+require_relative 'coach'
+require_relative 'train'
 
-puts my_route1 = Route.new('Moscow', 'Sochi')
-my_route1.add_interim('Krasnodar')
-my_route1.add_interim('Adler')
-my_route1.show_stations
+# RailWay
+class RW
+  attr_reader :trains, :routes, :stations, :coaches
 
-my_route1.remove_interim('Adler')
-my_route1.show_stations
-my_train2.add_speed(15)
-puts my_train2.speed
-my_train2.stop_speed
-puts my_train2.speed
-puts my_train2.coach_count
-my_train2.add_coach
-my_train2.add_coach
-puts my_train2.coach_count
-my_train2.remove_coach
-puts my_train2.coach_count
-puts my_train2.add_route(my_route1)
-my_train2.set_actual_station('next')
-puts my_train2.three_stations
-my_train2.set_actual_station('next')
-puts my_train2.three_stations
-my_train2.set_actual_station('back')
-puts my_train2.three_stations
+  def initialize
+    @trains = {}
+    @routes = {}
+    @stations = {}
+    @coaches = {}
+    init0
+  end
 
+  def init1
+    %w[Moscow Sochi Krasnodar Adler].each do |name|
+      stations[name] = Station.new(name)
+    end
+    puts stations
+  end
+
+  def init2
+    number = trains.count
+    types = Train::TRAIN_TYPES
+    puts 'Select type of train:'
+    types.each_with_index { |type, i| puts "#{i} - #{type} " }
+    type = types[gets.chomp.to_i]
+    my_class = "#{type.capitalize}Train"
+    trains[number] = Object.const_get(my_class).new(number)
+    puts trains
+  end
+
+  def init3
+    number = routes.count
+    routes[number] = Route.new(stations['Moscow'], stations['Sochi'])
+    routes[number].add_interim(stations['Krasnodar'])
+    routes[number].add_interim(stations['Adler'])
+    routes[number].remove_interim(stations['Adler'])
+    routes[number].show_stations
+    puts routes
+  end
+
+  def init4
+    puts '1'
+    trains[0].add_route(routes[0])
+    puts trains
+  end
+
+  def init5
+    number = coaches.count
+    types = Coach::COACH_TYPES
+    puts 'Select type of coach:'
+    types.each_with_index { |type, i| puts "#{i} - #{type} " }
+    type = types[gets.chomp.to_i]
+    my_class = "#{type.capitalize}Coach"
+    coaches[number] = Object.const_get(my_class).new()
+    puts coaches
+    trains[0].add_coach(coaches[number])
+    puts trains
+  end
+
+   def init6
+    puts 'Select direction: next / back'
+    direction = gets.chomp.to_s
+    trains[0].actual_station_set(direction)
+  end
+
+  def init7
+    puts stations
+  end
+
+  def init0
+    loop do 
+      puts '0 - Выйти'
+      puts '1 - Создавать станции'
+      puts '2 - Создавать поезда'
+      puts '3 - Создавать маршруты и управлять станциями в нем (добавлять, удалять)'
+      puts '4 - Назначать маршрут поезду'
+      puts '5 - Добавлять вагоны к поезду / Отцеплять вагоны от поезда'
+      puts '6 - Перемещать поезд по маршруту вперед и назад'
+      puts '7 - Просматривать список станций и список поездов на станции'
+      key = gets.chomp.to_i
+      break if key.zero?
+
+      send("init#{key}")
+    end
+  
+  end
+
+  def starting
+    init1
+    init2
+    init3
+    init4
+    init5
+    init6
+    init6
+    init7
+  end
+end
+
+rw = RW.new
