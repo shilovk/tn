@@ -1,12 +1,25 @@
 # frozen_string_literal: true
 
-# Stattion
+require_relative 'instance_counter'
+
+# Station
 class Station
+  include InstanceCounter
   attr_reader :trains, :title
+  @all = []
+  class << self
+    attr_reader :all
+
+    protected
+
+    attr_writer :all
+  end
 
   def initialize(title)
     @title = title
     @trains = []
+    Station.all << self
+    register_instance
     puts "Station #{title} created!"
   end
 

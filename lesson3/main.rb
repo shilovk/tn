@@ -22,7 +22,9 @@ class RW
     %w[Moscow Sochi Krasnodar Adler].each do |name|
       stations[name] = Station.new(name)
     end
+    Station.all
     puts stations
+    puts Station.instances
   end
 
   def init2
@@ -33,7 +35,12 @@ class RW
     type = types[gets.chomp.to_i]
     my_class = "#{type.capitalize}Train"
     trains[number] = Object.const_get(my_class).new(number)
+    trains[number].company = 'RZD'
+    trains[number].company
     puts trains
+    puts Train.find(0)
+    puts PassengerTrain.instances
+    puts CargoTrain.instances
   end
 
   def init3
@@ -44,6 +51,7 @@ class RW
     routes[number].remove_interim(stations['Adler'])
     routes[number].show_stations
     puts routes
+    puts Route.instances
   end
 
   def init4
@@ -59,13 +67,15 @@ class RW
     types.each_with_index { |type, i| puts "#{i} - #{type} " }
     type = types[gets.chomp.to_i]
     my_class = "#{type.capitalize}Coach"
-    coaches[number] = Object.const_get(my_class).new()
+    coaches[number] = Object.const_get(my_class).new
+    coaches[number].company = 'RZD'
+    coaches[number].company
     puts coaches
     trains[0].add_coach(coaches[number])
     puts trains
   end
 
-   def init6
+  def init6
     puts 'Select direction: next / back'
     direction = gets.chomp.to_s
     trains[0].actual_station_set(direction)
@@ -90,7 +100,6 @@ class RW
 
       send("init#{key}")
     end
-  
   end
 
   def starting
@@ -104,5 +113,3 @@ class RW
     init7
   end
 end
-
-rw = RW.new

@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
+require_relative 'company_name'
+
 # Coach
 class Coach
+  include CompanyName
   COACH_TYPES = %w[passenger cargo]
-
-  def initialize
-    @type = nil
-  end
 
   def of_type?(checking_type)
     @type == checking_type

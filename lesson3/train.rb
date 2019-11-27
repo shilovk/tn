@@ -1,18 +1,27 @@
 # frozen_string_literal: true
 
+require_relative 'company_name'
+require_relative 'instance_counter'
+
 # Train
 class Train
+  include CompanyName
+  include InstanceCounter
   attr_reader :speed, :coaches, :type, :actual_station
   TRAIN_TYPES = %w[passenger cargo]
+  @@trains = {}
 
   def initialize(number)
     @number = number
     @speed = 0
-    @actual_station = nil
-    @type = nil
-    @coaches = []
+    @@trains[number] = self
+    register_instance
   end
 
+  def self.find(number)
+    @@trains[number]
+  end
+  
   def add_speed(speed)
     @speed += speed
   end
@@ -62,18 +71,23 @@ end
 
 # PassengerTrain < Train
 class PassengerTrain < Train
-  def initialize(name, coaches = [])
-    super(name)
+  @trains = {}
+
+  def initialize(number, coaches = [])
     @type = TRAIN_TYPES.index('passenger')
     @coaches = coaches
+    super(number)
   end
 end
 
 # CargoTrain < Train
 class CargoTrain < Train
-  def initialize(name, coaches = [])
-    super(name)
+  @trains = {}
+
+  def initialize(number, coaches = [])
     @type = TRAIN_TYPES.index('cargo')
     @coaches = coaches
+    super(number)
   end
 end
+

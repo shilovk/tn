@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
+require_relative 'instance_counter'
+
 # Route
 class Route
+  include InstanceCounter
   attr_reader :from, :interim, :to
 
   def initialize(from, to, interim = [])
     @from = from
     @to = to
     @interim = interim
+    register_instance
   end
 
   def add_interim(interim)
