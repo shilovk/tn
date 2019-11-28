@@ -7,13 +7,15 @@ require_relative 'instance_counter'
 class Train
   include CompanyName
   include InstanceCounter
-  attr_reader :speed, :coaches, :type, :actual_station
+  attr_reader :speed, :coaches, :type, :actual_station, :number
   TRAIN_TYPES = %w[passenger cargo]
   @@trains = {}
+  NUMBER_FORMAT = /^[[a-z]\d]{3}[-]?([a-z]{2}|[\d]{2})$/i
 
-  def initialize(number)
-    @number = number
+  def initialize(number = nil)
+    @number = number.to_s.chomp
     @speed = 0
+    valid?
     @@trains[number] = self
     register_instance
   end
@@ -21,7 +23,7 @@ class Train
   def self.find(number)
     @@trains[number]
   end
-  
+
   def add_speed(speed)
     @speed += speed
   end
@@ -61,11 +63,23 @@ class Train
     coaches.push(coach) if coach.of_type?(type) && !coaches.include?(coach)
   end
 
+  def valid?
+    validate!
+  end
+
   protected
 
   # Вызываем из подкласса, когда уже понятно какого типа поезд
   def coaches=(coaches_array)
     coaches_array.each { |coach| add_coach(coach) }
+  end
+
+  def validate!
+    raise 'Number can\'t be nil' if number.nil?
+    raise 'Number mustbe at least 5 symbols' if number.to_s.length < 5
+    raise 'Number has invalid format' if number !~ NUMBER_FORMAT
+
+    true
   end
 end
 
@@ -73,7 +87,7 @@ end
 class PassengerTrain < Train
   @trains = {}
 
-  def initialize(number, coaches = [])
+  def initialize(number = nil, coaches = [])
     @type = TRAIN_TYPES.index('passenger')
     @coaches = coaches
     super(number)
@@ -84,10 +98,9 @@ end
 class CargoTrain < Train
   @trains = {}
 
-  def initialize(number, coaches = [])
+  def initialize(number = nil, coaches = [])
     @type = TRAIN_TYPES.index('cargo')
     @coaches = coaches
     super(number)
   end
 end
-

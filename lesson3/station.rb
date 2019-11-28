@@ -15,12 +15,12 @@ class Station
     attr_writer :all
   end
 
-  def initialize(title)
+  def initialize(title = nil)
     @title = title
     @trains = []
+    valid?
     Station.all << self
     register_instance
-    puts "Station #{title} created!"
   end
 
   def add_train(train)
@@ -29,7 +29,6 @@ class Station
     end
 
     trains << train
-    puts "Train #{train} arrived at the station #{title}"
   end
 
   def show_trains_by_type(type_of_train)
@@ -43,6 +42,19 @@ class Station
     end
 
     trains.delete(train)
-    puts "Train #{train} left the station #{title}"
+  end
+
+  def valid?
+    validate!
+  end
+
+  protected
+
+  def validate!
+    raise 'Title can\'t be nil' if title.nil?
+    raise 'Title has invalid format' unless title.is_a? String
+    raise 'Title can\'t be at least 3 symbols' if title.length < 3
+
+    true
   end
 end

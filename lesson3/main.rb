@@ -28,19 +28,22 @@ class RW
   end
 
   def init2
-    number = trains.count
     types = Train::TRAIN_TYPES
     puts 'Select type of train:'
     types.each_with_index { |type, i| puts "#{i} - #{type} " }
     type = types[gets.chomp.to_i]
     my_class = "#{type.capitalize}Train"
-    trains[number] = Object.const_get(my_class).new(number)
-    trains[number].company = 'RZD'
-    trains[number].company
+    puts 'Train number:'
+    number = gets
+    trains[number.to_s] = Object.const_get(my_class).new(number)
+    puts 'Train company:'
+    trains[number.to_s].company = gets.to_s.chomp
     puts trains
-    puts Train.find(0)
-    puts PassengerTrain.instances
-    puts CargoTrain.instances
+    puts Train.find(number.to_s).inspect
+  rescue => e
+    puts e.message
+    puts e.backtrace.inspect
+    retry
   end
 
   def init3
@@ -113,3 +116,5 @@ class RW
     init7
   end
 end
+
+RW.new

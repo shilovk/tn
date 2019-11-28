@@ -7,10 +7,11 @@ class Route
   include InstanceCounter
   attr_reader :from, :interim, :to
 
-  def initialize(from, to, interim = [])
+  def initialize(from = nil, to = nil, interim = [])
     @from = from
     @to = to
     @interim = interim
+    valid?
     register_instance
   end
 
@@ -22,7 +23,6 @@ class Route
     return unless self.interim.include?(interim)
 
     self.interim.delete(interim)
-    puts self.interim
   end
 
   def stations
@@ -74,5 +74,20 @@ class Route
 
   def three_stations(actual_station)
     [back_station(actual_station), actual_station, next_station(actual_station)]
+  end
+
+  def valid?
+    validate!
+  end
+
+  protected
+
+  def validate!
+    %w[from to].flatten.each do |variable|
+      var_name = instance_variable_get("@#{variable}")
+      raise "#{variable} can\'t be nil" if var_name.nil?
+      raise "#{variable} has invalid format" unless var_name.class.to_s == 'Station'
+    end
+    true
   end
 end
