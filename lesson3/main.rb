@@ -7,23 +7,18 @@ require_relative 'coach'
 require_relative 'train'
 
 # RailWay
-class RW
-  attr_reader :trains, :routes, :stations, :coaches
+class RailWay
+  attr_reader :trains, :routes, :coaches
 
   def initialize
-    @trains = {}
-    @routes = {}
-    @stations = {}
-    @coaches = {}
     init0
   end
 
   def init1
-    %w[Moscow Sochi Krasnodar Adler].each do |name|
-      stations[name] = Station.new(name)
+    %w[Moscow Krasnodar Adler Sochi].each do |name|
+      Station.new(name)
     end
-    Station.all
-    puts stations
+    puts Station.all.map(&:show)
     puts Station.instances
   end
 
@@ -35,11 +30,11 @@ class RW
     my_class = "#{type.capitalize}Train"
     puts 'Train number:'
     number = gets
-    trains[number.to_s] = Object.const_get(my_class).new(number)
+    train = Object.const_get(my_class).new(number)
     puts 'Train company:'
-    trains[number.to_s].company = gets.to_s.chomp
-    puts trains
-    puts Train.find(number.to_s).inspect
+    train.company = gets.to_s.chomp
+    puts Train.all.map(&:show)
+    puts Train.find(number).show
   rescue => e
     puts e.message
     puts e.backtrace.inspect
@@ -47,45 +42,44 @@ class RW
   end
 
   def init3
-    number = routes.count
-    routes[number] = Route.new(stations['Moscow'], stations['Sochi'])
-    routes[number].add_interim(stations['Krasnodar'])
-    routes[number].add_interim(stations['Adler'])
-    routes[number].remove_interim(stations['Adler'])
-    routes[number].show_stations
-    puts routes
+    route = Route.new(Station.find('Moscow'), Station.find('Sochi'))
+    route.add_interim(Station.find('Krasnodar'))
+    route.add_interim(Station.find('Adler'))
+    route.remove_interim(Station.find('Adler'))
+    route.show_stations
+    puts Route.all.map(&:show)
     puts Route.instances
   end
 
   def init4
-    puts '1'
-    trains[0].add_route(routes[0])
-    puts trains
+    Train.all.first.add_route(Route.all.first)
+    puts Train.all.inspect
   end
 
   def init5
-    number = coaches.count
     types = Coach::COACH_TYPES
     puts 'Select type of coach:'
     types.each_with_index { |type, i| puts "#{i} - #{type} " }
     type = types[gets.chomp.to_i]
     my_class = "#{type.capitalize}Coach"
-    coaches[number] = Object.const_get(my_class).new
-    coaches[number].company = 'RZD'
-    coaches[number].company
-    puts coaches
-    trains[0].add_coach(coaches[number])
-    puts trains
+    coach = Object.const_get(my_class).new
+    puts 'Coach company:'
+    coach.company = gets.to_s.chomp
+    coach.company
+    puts Coach.all.map(&:show)
+    puts Train.all.first.add_coach(coach)
+    puts Train.all.map(&:show)
   end
 
   def init6
     puts 'Select direction: next / back'
     direction = gets.chomp.to_s
-    trains[0].actual_station_set(direction)
+    Train.all.first.actual_station_set(direction)
+    puts Train.all.first.show
   end
 
   def init7
-    puts stations
+    puts Station.all.map(&:show)
   end
 
   def init0
@@ -117,4 +111,5 @@ class RW
   end
 end
 
-RW.new
+RailWay.new
+exit

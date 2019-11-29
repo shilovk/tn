@@ -1,18 +1,29 @@
 # frozen_string_literal: true
 
 require_relative 'instance_counter'
+require_relative 'show'
 require_relative 'station'
 
 # Route
 class Route
   include InstanceCounter
+  include Show
   attr_reader :from, :interim, :to
+  @all = []
+  class << self
+    attr_reader :all
+
+    protected
+
+    attr_writer :all
+  end
 
   def initialize(from = nil, to = nil, interim = [])
     @from = from
     @to = to
     @interim = interim
     valid?
+    Route.all << self
     register_instance
   end
 

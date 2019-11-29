@@ -2,26 +2,34 @@
 
 require_relative 'company_name'
 require_relative 'instance_counter'
+require_relative 'show'
 
 # Train
 class Train
   include CompanyName
   include InstanceCounter
+  include Show
   attr_reader :speed, :coaches, :type, :actual_station, :number
   TRAIN_TYPES = %w[passenger cargo]
-  @@trains = {}
+  @@trains = []
   NUMBER_FORMAT = /^[[a-z]\d]{3}[-]?([a-z]{2}|[\d]{2})$/i
 
   def initialize(number = nil)
     @number = number.to_s.chomp
     @speed = 0
+    @coaches = []
     validate!
-    @@trains[number] = self
+    @@trains << self
     register_instance
   end
 
-  def self.find(number)
-    @@trains[number]
+  def self.all
+    @@trains
+  end
+
+  def self.find(value)
+    value = value.to_s.chomp
+    @@trains.find { |element| element.number == value }
   end
 
   def add_speed(speed)
@@ -78,15 +86,12 @@ class Train
     raise 'Number can\'t be nil' unless number
     raise 'Number must be at least 5 symbols' if number.to_s.length < 5
     raise 'Number has invalid format' if number !~ NUMBER_FORMAT
-
     true
   end
 end
 
 # PassengerTrain < Train
 class PassengerTrain < Train
-  @trains = {}
-
   def initialize(number = nil, coaches = [])
     @type = TRAIN_TYPES.index('passenger')
     @coaches = coaches
@@ -96,8 +101,6 @@ end
 
 # CargoTrain < Train
 class CargoTrain < Train
-  @trains = {}
-
   def initialize(number = nil, coaches = [])
     @type = TRAIN_TYPES.index('cargo')
     @coaches = coaches

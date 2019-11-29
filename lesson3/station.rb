@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 require_relative 'instance_counter'
+require_relative 'show'
+require_relative 'train'
+require_relative 'coach'
 
 # Station
 class Station
   include InstanceCounter
+  include Show
   attr_reader :trains, :title
   @all = []
   class << self
@@ -21,6 +25,11 @@ class Station
     validate!
     Station.all << self
     register_instance
+  end
+
+  def self.find(value)
+    value = value.to_s.chomp
+    all.find { |element| element.title == value }
   end
 
   def add_train(train)
@@ -47,6 +56,7 @@ class Station
   def valid?
     validate!
   rescue
+
     false
   end
 
