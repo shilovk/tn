@@ -18,7 +18,7 @@ class Station
   def initialize(title = nil)
     @title = title
     @trains = []
-    valid?
+    validate!
     Station.all << self
     register_instance
   end
@@ -46,12 +46,14 @@ class Station
 
   def valid?
     validate!
+  rescue
+    false
   end
 
   protected
 
   def validate!
-    raise 'Title can\'t be nil' if title.nil?
+    raise 'Title can\'t be nil' unless title
     raise 'Title has invalid format' unless title.is_a? String
     raise 'Title can\'t be at least 3 symbols' if title.length < 3
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'instance_counter'
+require_relative 'station'
 
 # Route
 class Route
@@ -86,7 +87,7 @@ class Route
     %w[from to].flatten.each do |variable|
       var_name = instance_variable_get("@#{variable}")
       raise "#{variable} can\'t be nil" if var_name.nil?
-      raise "#{variable} has invalid format" unless var_name.class.to_s == 'Station'
+      raise "#{variable} has invalid format" unless var_name.is_a? Station
     end
     true
   end

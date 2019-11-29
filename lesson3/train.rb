@@ -15,7 +15,7 @@ class Train
   def initialize(number = nil)
     @number = number.to_s.chomp
     @speed = 0
-    valid?
+    validate!
     @@trains[number] = self
     register_instance
   end
@@ -75,8 +75,8 @@ class Train
   end
 
   def validate!
-    raise 'Number can\'t be nil' if number.nil?
-    raise 'Number mustbe at least 5 symbols' if number.to_s.length < 5
+    raise 'Number can\'t be nil' unless number
+    raise 'Number must be at least 5 symbols' if number.to_s.length < 5
     raise 'Number has invalid format' if number !~ NUMBER_FORMAT
 
     true
