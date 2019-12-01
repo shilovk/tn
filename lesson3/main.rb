@@ -75,7 +75,7 @@ class RailWay
     puts Train.all.first.add_coach(coach)
     puts Train.all.map(&:show)
     Train.all.first.execute Coach.show_all_by_proc
-    Train.all.first.actual_station.execute { |el| puts "#{el.number} #{el.type} #{el.coaches.count}" }
+    Train.all.first.actual_station.execute { |el| puts "Train: #{el.number} #{el.type} #{el.coaches.count}" }
   end
 
   def init6
@@ -90,7 +90,7 @@ class RailWay
     puts Station.all.map(&:show)
     Station.all.each do |station|
       puts station.title
-      station.execute { |el| puts "#{el.number} #{el.type} #{el.coaches.count}" }
+      station.execute { |el| puts "Train: #{el.number} #{el.type} #{el.coaches.count}" }
     end
   end
 

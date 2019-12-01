@@ -75,11 +75,12 @@ class Train
   def valid?
     validate!
   rescue
+    
     false
   end
 
   def execute(block_for)
-    coaches.each { |el| block_for.call(el) }
+    coaches.each_with_index { |el, i| block_for.call(el, i) }
   end
 
   protected

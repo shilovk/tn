@@ -9,7 +9,7 @@ class Coach
   include Show
   COACH_TYPES = %w[passenger cargo]
   @all = []
-  @show_all_by_proc = proc { |el| puts "#{Coach::COACH_TYPES[el.type]} #{el.free} #{el.busy}" }
+  @show_all_by_proc = proc { |el, i| puts "Coach: #{i+1} #{Coach::COACH_TYPES[el.type]} #{el.free} #{el.busy}" }
   class << self
     attr_reader :all, :show_all_by_proc
 
