@@ -3,7 +3,6 @@
 require_relative 'company_name'
 require_relative 'instance_counter'
 require_relative 'show'
-require_relative 'coach'
 
 # Train
 class Train
@@ -53,7 +52,7 @@ class Train
   end
 
   def actual_station_set(direction = nil)
-    @actual_station.send_train(self) unless @actual_station.nil?
+    @actual_station.send_train(self) unless @actual_station.nil? #TODO if @actual_station
     @actual_station = @route.actual_station_by(direction, @actual_station)
     @actual_station.add_train(self)
   end
@@ -75,11 +74,10 @@ class Train
   def valid?
     validate!
   rescue
-    
     false
   end
 
-  def execute(block_for)
+  def each_coach(block_for)
     coaches.each_with_index { |el, i| block_for.call(el, i) }
   end
 
@@ -94,7 +92,7 @@ class Train
     raise 'Number can\'t be nil' unless number
     raise 'Number must be at least 5 symbols' if number.to_s.length < 5
     raise 'Number has invalid format' if number !~ NUMBER_FORMAT
-    
+
     true
   end
 end
@@ -116,4 +114,3 @@ class CargoTrain < Train
     super(number)
   end
 end
-

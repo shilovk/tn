@@ -3,8 +3,11 @@
 require 'pry'
 require_relative 'station'
 require_relative 'route'
-require_relative 'coach'
 require_relative 'train'
+require_relative 'coach'
+require_relative 'passenger_coach'
+require_relative 'cargo_coach'
+
 
 # RailWay
 class RailWay
@@ -68,14 +71,10 @@ class RailWay
     puts 'Coach company:'
     coach.company = gets.to_s.chomp
     coach.company
-    puts 'Enter occupied seats/space:'
-    puts Coach.all.map(&:show)
-    coach.size_set gets
     puts Coach.all.map(&:show)
     puts Train.all.first.add_coach(coach)
     puts Train.all.map(&:show)
-    Train.all.first.execute Coach.show_all_by_proc
-    Train.all.first.actual_station.execute { |el| puts "Train: #{el.number} #{el.type} #{el.coaches.count}" }
+    Train.all.first.each_coach Coach.proc_show_template
   end
 
   def init6
@@ -83,15 +82,23 @@ class RailWay
     direction = gets.chomp.to_s
     Train.all.first.actual_station_set(direction)
     puts Train.all.first.show
-    Train.all.first.execute Coach.show_all_by_proc
+    Train.all.first.each_coach Coach.proc_show_template
   end
 
   def init7
     puts Station.all.map(&:show)
     Station.all.each do |station|
-      puts station.title
-      station.execute { |el| puts "Train: #{el.number} #{el.type} #{el.coaches.count}" }
+      puts "Trains on station #{station.title}:"
+      station.each_train do |el|
+        puts "- Train #{el.number} #{el.type} #{el.coaches.count}"
+      end
     end
+  end
+
+  def init8
+    puts 'Enter occupied size:'
+    Coach.all.first.size_set gets
+    Train.all.first.each_coach Coach.proc_show_template
   end
 
   def init0
@@ -104,6 +111,7 @@ class RailWay
       puts '5 - Добавлять вагоны к поезду / Отцеплять вагоны от поезда'
       puts '6 - Перемещать поезд по маршруту вперед и назад'
       puts '7 - Просматривать список станций и список поездов на станции'
+      puts '8 - Занимать место в вагоне'
       key = gets.chomp.to_i
       break if key.zero?
 
@@ -120,6 +128,7 @@ class RailWay
     init6
     init6
     init7
+    init8
   end
 end
 

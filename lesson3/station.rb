@@ -2,8 +2,6 @@
 
 require_relative 'instance_counter'
 require_relative 'show'
-require_relative 'train'
-require_relative 'coach'
 
 # Station
 class Station
@@ -56,12 +54,11 @@ class Station
   def valid?
     validate!
   rescue
-
     false
   end
 
-  def execute(&block_for)
-    trains.each { |el| block_for.call(el) }
+  def each_train
+    trains.each { |el| yield(el) }
   end
 
   protected
@@ -74,4 +71,3 @@ class Station
     true
   end
 end
-
