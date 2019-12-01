@@ -60,6 +60,10 @@ class Station
     false
   end
 
+  def execute(&block_for)
+    trains.each { |el| block_for.call(el) }
+  end
+
   protected
 
   def validate!
@@ -70,3 +74,4 @@ class Station
     true
   end
 end
+

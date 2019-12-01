@@ -3,6 +3,7 @@
 require_relative 'company_name'
 require_relative 'instance_counter'
 require_relative 'show'
+require_relative 'coach'
 
 # Train
 class Train
@@ -73,6 +74,12 @@ class Train
 
   def valid?
     validate!
+  rescue
+    false
+  end
+
+  def execute(&block_for)
+    coaches.each { |el| block_for.call(el) }
   end
 
   protected
@@ -86,6 +93,7 @@ class Train
     raise 'Number can\'t be nil' unless number
     raise 'Number must be at least 5 symbols' if number.to_s.length < 5
     raise 'Number has invalid format' if number !~ NUMBER_FORMAT
+    
     true
   end
 end
@@ -107,3 +115,4 @@ class CargoTrain < Train
     super(number)
   end
 end
+

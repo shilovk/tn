@@ -62,13 +62,20 @@ class RailWay
     types.each_with_index { |type, i| puts "#{i} - #{type} " }
     type = types[gets.chomp.to_i]
     my_class = "#{type.capitalize}Coach"
-    coach = Object.const_get(my_class).new
+    puts 'Enter seats/space:'
+    size = gets
+    coach = Object.const_get(my_class).new(size)
     puts 'Coach company:'
     coach.company = gets.to_s.chomp
     coach.company
+    puts 'Enter occupied seats/space:'
+    puts Coach.all.map(&:show)
+    coach.size_set gets
     puts Coach.all.map(&:show)
     puts Train.all.first.add_coach(coach)
     puts Train.all.map(&:show)
+    Train.all.first.execute { |el| puts el.show }
+    Train.all.first.actual_station.execute { |el| puts el.show }
   end
 
   def init6
@@ -76,18 +83,23 @@ class RailWay
     direction = gets.chomp.to_s
     Train.all.first.actual_station_set(direction)
     puts Train.all.first.show
+    Train.all.first.execute { |el| puts "#{Coach::COACH_TYPES[el.type]} #{el.free} #{el.busy}" }
   end
 
   def init7
     puts Station.all.map(&:show)
+    Station.all.each do |station|
+      puts station.title
+      station.execute { |el| puts "#{el.number} #{el.type} #{el.coaches.count}" }
+    end
   end
 
   def init0
-    loop do 
+    loop do
       puts '0 - Выйти'
       puts '1 - Создавать станции'
       puts '2 - Создавать поезда'
-      puts '3 - Создавать маршруты и управлять станциями в нем (добавлять, удалять)'
+      puts '3 - Создавать маршруты и управлять станциями в нем'
       puts '4 - Назначать маршрут поезду'
       puts '5 - Добавлять вагоны к поезду / Отцеплять вагоны от поезда'
       puts '6 - Перемещать поезд по маршруту вперед и назад'
