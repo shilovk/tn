@@ -74,8 +74,8 @@ class RailWay
     puts Coach.all.map(&:show)
     puts Train.all.first.add_coach(coach)
     puts Train.all.map(&:show)
-    Train.all.first.execute { |el| puts el.show }
-    Train.all.first.actual_station.execute { |el| puts el.show }
+    Train.all.first.execute Coach.show_all_by_proc
+    Train.all.first.actual_station.execute { |el| puts "#{el.number} #{el.type} #{el.coaches.count}" }
   end
 
   def init6
@@ -83,7 +83,7 @@ class RailWay
     direction = gets.chomp.to_s
     Train.all.first.actual_station_set(direction)
     puts Train.all.first.show
-    Train.all.first.execute { |el| puts "#{Coach::COACH_TYPES[el.type]} #{el.free} #{el.busy}" }
+    Train.all.first.execute Coach.show_all_by_proc
   end
 
   def init7

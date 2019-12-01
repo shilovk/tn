@@ -78,7 +78,7 @@ class Train
     false
   end
 
-  def execute(&block_for)
+  def execute(block_for)
     coaches.each { |el| block_for.call(el) }
   end
 
