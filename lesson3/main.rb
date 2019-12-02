@@ -96,8 +96,9 @@ class RailWay
   end
 
   def init8
-    puts 'Enter occupied size:'
-    Coach.all.first.size_set gets
+    puts 'Occupied size:'
+    size = gets if Coach.all.first.type == 1
+    Coach.all.first.size_set size||nil
     Train.all.first.each_coach Coach.proc_show_template
   end
 

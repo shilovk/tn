@@ -7,7 +7,7 @@ class PassengerCoach < Coach
     super
   end
 
-  def size_set
+  def size_set(_size)
     super(1)
   end
 end
