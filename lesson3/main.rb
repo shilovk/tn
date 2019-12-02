@@ -8,7 +8,6 @@ require_relative 'coach'
 require_relative 'passenger_coach'
 require_relative 'cargo_coach'
 
-
 # RailWay
 class RailWay
   attr_reader :trains, :routes, :coaches
@@ -38,7 +37,7 @@ class RailWay
     train.company = gets.to_s.chomp
     puts Train.all.map(&:show)
     puts Train.find(number).show
-  rescue => e
+  rescue StandardError => e
     puts e.message
     puts e.backtrace.inspect
     retry
@@ -98,7 +97,7 @@ class RailWay
   def init8
     puts 'Occupied size:'
     size = gets if Coach.all.first.type == 1
-    Coach.all.first.size_set size||nil
+    Coach.all.first.size_set size || nil
     Train.all.first.each_coach Coach.proc_show_template
   end
 
@@ -118,18 +117,6 @@ class RailWay
 
       send("init#{key}")
     end
-  end
-
-  def starting
-    init1
-    init2
-    init3
-    init4
-    init5
-    init6
-    init6
-    init7
-    init8
   end
 end
 

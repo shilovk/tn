@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Sample
   def hello
     puts 'Hello, World!'

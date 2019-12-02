@@ -31,9 +31,7 @@ class Station
   end
 
   def add_train(train)
-    if trains.include?(train)
-      raise "The train #{train} is already at the station #{title}"
-    end
+    raise "The train #{train} is already at the station #{title}" if trains.include?(train)
 
     trains << train
   end
@@ -44,16 +42,14 @@ class Station
   end
 
   def send_train(train)
-    unless trains.include?(train)
-      raise("The train #{train} is not at the station #{title}")
-    end
+    raise("The train #{train} is not at the station #{title}") unless trains.include?(train)
 
     trains.delete(train)
   end
 
   def valid?
     validate!
-  rescue
+  rescue StandardError
     false
   end
 

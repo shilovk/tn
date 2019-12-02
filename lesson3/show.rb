@@ -7,6 +7,6 @@ module Show
       i_v = instance_variable_get(el)
       memo[el] = i_v.is_a?(Array) ? i_v.map(&:show) : i_v
     end
-    {self.class => hash}
+    { self.class => hash }
   end
 end

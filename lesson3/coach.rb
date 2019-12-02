@@ -7,7 +7,7 @@ require_relative 'show'
 class Coach
   include CompanyName
   include Show
-  COACH_TYPES = %w[passenger cargo]
+  COACH_TYPES = %w[passenger cargo].freeze
   @all = []
   @proc_show_template = proc do |el, i|
     puts "Coach: #{i + 1} #{Coach::COACH_TYPES[el.type]} #{el.free} #{el.busy}"

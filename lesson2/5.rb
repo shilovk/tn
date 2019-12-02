@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 # 5. Заданы три числа, которые обозначают число, месяц, год (запрашиваем у пользователя). Найти порядковый номер даты, начиная отсчет с начала года. Учесть, что год может быть високосным. (Запрещено использовать встроенные в ruby методы для этого вроде Date#yday или Date#leap?) Алгоритм опредления високосного года: www.adm.yar.ru
 
 require 'time'
 
 class CalcDate
-   COMMON_YEAR_DAYS_IN_MONTH = [nil, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-  
+  COMMON_YEAR_DAYS_IN_MONTH = [nil, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31].freeze
+
   def initialize
     print 'day(1-31): '
     @day = gets.chomp.to_i
@@ -15,11 +17,12 @@ class CalcDate
   end
 
   def gregorian_leap?
-   @year%4 == 0 && @year%100 != 0 || @year%400 == 0 
+    @year % 4.zero? && @year % 100 != 0 || @year % 400.zero?
   end
 
   def days_in_month(month)
     return 29 if month == 2 || gregorian_leap?
+
     COMMON_YEAR_DAYS_IN_MONTH[month]
   end
 

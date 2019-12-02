@@ -10,9 +10,9 @@ class Train
   include InstanceCounter
   include Show
   attr_reader :speed, :coaches, :type, :actual_station, :number
-  TRAIN_TYPES = %w[passenger cargo]
+  TRAIN_TYPES = %w[passenger cargo].freeze
   @@trains = []
-  NUMBER_FORMAT = /^[[a-z]\d]{3}[-]?([a-z]{2}|[\d]{2})$/i
+  NUMBER_FORMAT = /^[[a-z]\d]{3}[-]?([a-z]{2}|[\d]{2})$/i.freeze
 
   def initialize(number = nil)
     @number = number.to_s.chomp
@@ -52,7 +52,7 @@ class Train
   end
 
   def actual_station_set(direction = nil)
-    @actual_station.send_train(self) unless @actual_station.nil? #TODO if @actual_station
+    @actual_station&.send_train(self) # TODO: if @actual_station
     @actual_station = @route.actual_station_by(direction, @actual_station)
     @actual_station.add_train(self)
   end
@@ -73,7 +73,7 @@ class Train
 
   def valid?
     validate!
-  rescue
+  rescue StandardError
     false
   end
 
