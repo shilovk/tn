@@ -93,6 +93,3 @@ Metrics/AbcSize:
 
 Lint/UselessAssignment:
   Enabled: false
-
-Lint/ParenthesesAsGroupedExpression:
-  Enabled: false
