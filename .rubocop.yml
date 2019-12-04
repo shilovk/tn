@@ -93,3 +93,6 @@ Metrics/AbcSize:
 
 Lint/UselessAssignment:
   Enabled: false
+
+Style/RescueStandardError:
+  Enabled: false
