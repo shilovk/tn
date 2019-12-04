@@ -57,3 +57,18 @@ end
 p order = Order.new
 p order.respond_to?(:user_not_method) # #<Method: Order#user_not_method>
 p order.method(:user_not_method) # #<Method: Order#user_not_method>
+
+# For hash
+class Hash
+  def method_missing(name)
+    self[name.to_sym] || self[name.to_s] || super
+  end
+
+  def respond_to_missing?(_name, _include_private)
+    super
+  end
+end
+
+hash = {a: 2, "b": 1, c: 0.5}
+p hash.a # 2
+p hash.b # 1
