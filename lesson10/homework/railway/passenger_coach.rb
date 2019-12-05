@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
+require_relative 'validation'
+
 # PassengerCoach < Coach
 class PassengerCoach < Coach
+  include Validation
+
   def initialize(size)
     @type = COACH_TYPES.index('passenger')
     super

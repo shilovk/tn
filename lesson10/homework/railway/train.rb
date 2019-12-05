@@ -74,7 +74,7 @@ class Train
     raise "The coach #{coach} is on the train #{self}" if coaches.include?(coach)
     raise 'Wrong type of coach for the train' unless coach.of_type?(type)
 
-    coaches = coach
+    self.coaches = coach
   end
 
   def remove_coach(coach)
