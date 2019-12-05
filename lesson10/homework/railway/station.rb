@@ -3,6 +3,7 @@
 require_relative 'modules/accessors'
 require_relative 'modules/validation'
 require_relative 'modules/instance_counter'
+require_relative 'modules/class_instances'
 require_relative 'modules/show'
 
 # Station
@@ -10,17 +11,10 @@ class Station
   extend Accessors
   include Validation
   include InstanceCounter
+  include ClassInstances
   include Show
 
-  @all = []
-  class << self
-    attr_reader :all
-
-    protected
-
-    attr_writer :all
-  end
-
+  class_attr_accessor_with_history :all
   attr_accessor_with_history :trains
   attr_reader :title
 
@@ -30,7 +24,7 @@ class Station
   def initialize(title = nil)
     @title = title
     validate!
-    Station.all << self
+    Station.all = self
     register_instance
   end
 
