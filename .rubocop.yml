@@ -96,3 +96,6 @@ Lint/UselessAssignment:
 
 Style/RescueStandardError:
   Enabled: false
+
+Lint/ParenthesesAsGroupedExpression:
+  Enabled: false

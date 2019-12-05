@@ -43,7 +43,7 @@ class Order
 
   def method_missing(method_name, *arguments, &block)
     if method_name.to_s =~ /user_(.*)/
-      user.send($1, *arguments, &block)
+      user.send(Regexp.last_match(1), *arguments, &block)
     else
       super
     end
@@ -69,6 +69,6 @@ class Hash
   end
 end
 
-hash = {a: 2, "b": 1, c: 0.5}
+hash = { a: 2, "b": 1, c: 0.5 }
 p hash.a # 2
 p hash.b # 1
