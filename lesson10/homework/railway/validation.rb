@@ -16,7 +16,7 @@ module Validation
     protected
 
     def presence_for(name)
-      validation_name = "#{name}_present?"
+      validation_name = "#{name}_is_present?"
       define_method(validation_name) do
         var_name = "@#{name}".to_sym
         value = instance_variable_get(var_name)
@@ -27,7 +27,7 @@ module Validation
     end
 
     def format_for(name, args)
-      validation_name = "#{name}_type?"
+      validation_name = "#{name}_is_type?"
       define_method(validation_name) do
         var_name = "@#{name}".to_sym
         value = instance_variable_get(var_name)
@@ -38,11 +38,11 @@ module Validation
     end
 
     def type_for(name, args)
-      validation_name = "#{name}_type?"
+      validation_name = "#{name}_is_type?"
       define_method(validation_name) do
         var_name = "@#{name}".to_sym
         value = instance_variable_get(var_name)
-        raise "#{name} is not a #{args}!" unless value.is_a? args
+        raise "#{name} is not a #{args}, it is #{value.class}!" unless value.is_a? args
 
         return true
       end
@@ -60,12 +60,11 @@ module Validation
     protected
 
     def validate!
-      methods = public_methods.select { |name| name.to_s =~ /.*_(present|format|type)\?$/ }
+      methods = public_methods.select { |name| name.to_s =~ /.*_is_(present|format|type)\?$/ }
       methods.each { |method| send method }
       'All variables valid'
     rescue => e
-      p e.message
-      'Not valid'
+      raise e.message
     end
   end
 end

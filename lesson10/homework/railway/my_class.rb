@@ -42,4 +42,4 @@ p my_obj.my_fixnum
 my_obj.val1 = 'A-Z'
 my_obj.val2 = 'A-Z'
 my_obj.val3 = '1'
-my_obj.valid?
+p my_obj.valid?
