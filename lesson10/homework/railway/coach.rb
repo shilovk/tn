@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'validation'
-require_relative 'company_name'
-require_relative 'show'
+require_relative 'modules/validation'
+require_relative 'modules/company_name'
+require_relative 'modules/show'
 
 # Coach
 class Coach

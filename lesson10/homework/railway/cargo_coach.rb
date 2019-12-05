@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'validation'
+require_relative 'modules/validation'
 
 # CargoCoach < Train
 class CargoCoach < Coach
