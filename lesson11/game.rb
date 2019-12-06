@@ -59,7 +59,7 @@ class Game
     p Card.names(player.cards)
     p Card.values(player.cards)
     p player
-    gets
+    sleep(2)
   end
 
   #  def new_card
