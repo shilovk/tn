@@ -32,6 +32,7 @@ class Route
 
   def initialize(from = nil, to = nil)
     @from = from
+    @interim = []
     @to = to
     validate!
     Route.all << self
@@ -39,7 +40,7 @@ class Route
   end
 
   def add_interim(interim)
-    self.interim = interim
+    self.interim << interim
   end
 
   def remove_interim(interim)
