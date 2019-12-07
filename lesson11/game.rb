@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
+require 'pry'
+require_relative 'modules/game_mixin'
 require_relative 'player'
 require_relative 'card'
 
 # Game
 class Game
-  STEPS = { 'next' => 'next step', 'take' => 'take card', 'open' => 'open cards'}.freeze
-  
+  include GameMixin
+
   @bank = 0
-  @steps = Game::STEPS.keys
   class << self
     attr_accessor :bank
-    attr_reader :steps
   end
 
   attr_reader :player
@@ -34,14 +34,16 @@ class Game
     sleep(1)
     choosing
     sleep(1)
+    p Game.bank
   end
 
   def choosing(steps)
-    p 'Please choose:'
-    steps.each { |step| p Game::STEPS[step] }
+    p "#{player.name}, please choose:"
+    p Game::STEPS
     choose = gets.chomp
     player.add_card
     p player.cards_names
+    p player.cards_values
     sleep(1)
   end
 
@@ -54,7 +56,6 @@ class Game
   # def open_cards
 
   # end
-
 
   #   loop do
   #     [user, dealer].each do |player|
@@ -82,29 +83,32 @@ end
 
 # UserGame < Game
 class UserGame < Game
+  define_steps
+
   def initialize
     p 'Hello! what is your name?'
-    @player = User.new(gets)
-    super(@player)
+    super(User.new(gets))
   end
 
-  def choosing(steps = Game.steps)
-    steps.delete('take') if player.cards.count > 3
+  def choosing
+    steps = self.class.steps
+    steps -= ['take'] if player.cards.count > 3
     super(steps)
   end
 end
 
 # DealerGame < Game
 class DealerGame < Game
+  define_steps delete: 'open'
+
   def initialize
-    @player = Dealer.new
-    super(@player)
+    super(Dealer.new)
   end
 
-  def choosing(steps = Game.steps)
-    steps.delete('next') if player.points < 17
-    steps.delete('take') if player.points > 18
-    steps.delete('open')
+  def choosing
+    steps = self.class.steps
+    steps -= ['next'] if player.points < 17
+    steps -= ['take'] if player.points > 18
     super(steps) unless steps.nil?
   end
 end
