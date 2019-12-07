@@ -5,18 +5,56 @@ require_relative 'card'
 
 # Game
 class Game
-  def initialize
-    p 'Hello! What is your name?'
-    @user = User.new(gets)
-    @dealer = Dealer.new
-    game
+  STEPS = { 'next' => 'next step', 'take' => 'take card', 'open' => 'open cards'}.freeze
+  
+  @bank = 0
+  @steps = Game::STEPS.keys
+  class << self
+    attr_accessor :bank
+    attr_reader :steps
   end
 
-  def game
-    @bank = 0
-    start_for(@user)
-    start_for(@dealer)
+  attr_reader :player
+
+  def initialize(player)
+    @player = player
+    init
   end
+
+  def init
+    p "#{player.name}, you are taking 2 cards"
+    player.money -= 10
+    Game.bank += 10
+    player.add_card
+    player.add_card
+    sleep(1)
+    p 'And they are:'
+    p player.cards_names
+    p player.cards_values
+    sleep(1)
+    choosing
+    sleep(1)
+  end
+
+  def choosing(steps)
+    p 'Please choose:'
+    steps.each { |step| p Game::STEPS[step] }
+    choose = gets.chomp
+    player.add_card
+    p player.cards_names
+    sleep(1)
+  end
+
+  #  def new_card
+  #   raise 'You can not take over 3 cards!' if @@cards.count == 3
+
+  #   add_card
+  # end
+
+  # def open_cards
+
+  # end
+
 
   #   loop do
   #     [user, dealer].each do |player|
@@ -40,38 +78,42 @@ class Game
   #     @dayler.money += Main.bank
   #   end
   # end
-
-  # def choosing_for(player)
-  #   p player.menu
-  #   choose = gets.to_i
-  # end
-
-  protected
-
-  def start_for(player)
-    p "#{player.name}, you are taking 2 cards"
-    player.money -= 10
-    @bank += 10
-    player.add_card
-    player.add_card
-    sleep(2)
-    p 'And they are:'
-    p Card.names(player.cards)
-    p Card.values(player.cards)
-    p player
-    sleep(2)
-  end
-
-  #  def new_card
-  #   raise 'You can not take over 3 cards!' if @@cards.count == 3
-
-  #   add_card
-  # end
-
-  # def open_cards
-
-  # end
 end
 
-Game.new
+# UserGame < Game
+class UserGame < Game
+  def initialize
+    p 'Hello! what is your name?'
+    @player = User.new(gets)
+    super(@player)
+  end
+
+  def choosing(steps = Game.steps)
+    steps.delete('take') if player.cards.count > 3
+    super(steps)
+  end
+end
+
+# DealerGame < Game
+class DealerGame < Game
+  def initialize
+    @player = Dealer.new
+    super(@player)
+  end
+
+  def choosing(steps = Game.steps)
+    steps.delete('next') if player.points < 17
+    steps.delete('take') if player.points > 18
+    steps.delete('open')
+    super(steps) unless steps.nil?
+  end
+end
+
+user_game = UserGame.new
+dealer_game = DealerGame.new
+# loop
+user_game.choosing
+dealer_game.choosing
+# rescue
+# init
 exit
