@@ -14,27 +14,24 @@ class Player
   end
 
   def add_card
-    cards << Card.new
+    card = Card.new
+    cards << card
+    self.points = cards_points
   end
 
   def cards_names
     Card.names(cards)
   end
 
-  def cards_values
-    Card.values(cards)
+  def cards_points
+    Card.points(cards)
   end
 
-  # def calc
-  #   @sum += @@cards.last
-  #   raise 'you lose' if (@sum || @sum - 10) > 21
-  #   # rescue => e
-  #   #   p e.message
-  # end
+  protected
 
-  # def calc_sum(card)
-  #   @sum = Card.value_of(card)
-  # end
+  def points=(points)
+    @points = Card.calc(points)
+  end
 end
 
 # User < Player
@@ -60,5 +57,9 @@ class Dealer < Player
 
   def user?
     false
+  end
+
+  def cards_names(*hide)
+    hide ? cards.map { '*' } : super()
   end
 end

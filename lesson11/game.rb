@@ -30,20 +30,21 @@ class Game
     sleep(1)
     p 'And they are:'
     p player.cards_names
-    p player.cards_values
+    p player.cards_points
+    p player.points
     sleep(1)
     choosing
     sleep(1)
-    p Game.bank
   end
 
   def choosing(steps)
     p "#{player.name}, please choose:"
-    p Game::STEPS
+    steps.each { |step| p "#{step} - #{Game::STEPS[step]}" }
     choose = gets.chomp
     player.add_card
     p player.cards_names
-    p player.cards_values
+    p player.cards_points
+    p player.points
     sleep(1)
   end
 
