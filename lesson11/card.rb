@@ -27,15 +27,10 @@ class Card
     twice_points = points.select { |el| el.is_a? Array }
     points -= twice_points
     calc = points.sum
-    raise 'loose' if calc > 21
-
     twice_points.each do
       calc += 11
       calc -= 10 if calc > 21
     end
     calc
-  rescue => e
-    p e.message
-    p calc
   end
 end

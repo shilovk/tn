@@ -2,7 +2,7 @@
 
 # GameMixin
 module GameMixin
-  STEPS = { 'next' => 'next step', 'take' => 'take card', 'open' => 'open cards' }.freeze
+  STEPS = { 'next' => 'next step', 'taking' => 'take card', 'opening' => 'open cards' }.freeze
 
   def self.included(base)
     base.extend ClassMethods

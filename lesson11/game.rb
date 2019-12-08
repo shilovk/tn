@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'pry'
 require_relative 'modules/game_mixin'
-require_relative 'player'
+require_relative 'user_player'
+require_relative 'dealer_player'
 require_relative 'card'
 
 # Game
@@ -10,115 +10,104 @@ class Game
   include GameMixin
 
   @bank = 0
+  @sessions = []
   class << self
-    attr_accessor :bank
+    attr_accessor :bank, :sessions
   end
 
+  attr_accessor :score
   attr_reader :player
 
   def initialize(player)
     @player = player
-    init
+    @score = 0
+    Game.sessions << self
+  end
+
+  def self.play
+    sessions.each { |session| session.init }
+    loop do
+      sessions.each { |session| session.choosing }
+    rescue => e
+      p e.message
+      p 'Play next? y - yes'
+      play if gets.chomp == 'y'
+      exit
+    end
   end
 
   def init
-    p "#{player.name}, you are taking 2 cards"
+    player.cards.clear
     player.money -= 10
     Game.bank += 10
-    player.add_card
-    player.add_card
-    sleep(1)
-    p 'And they are:'
-    p player.cards_names
-    p player.cards_points
-    p player.points
-    sleep(1)
+    2.times { taking }
     choosing
-    sleep(1)
+  end
+
+  protected
+
+  def self.analize
+    max = scores.max
+    max = (scores - [max]).max if max > 21
+    winners = Game.players_by_score(max)
+    winners ? win(winners) : no_win
+    raise 'Gave Over'
+  end
+  
+  def self.no_win
+    p 'No winners'
+    sessions.each do |session|
+      session.player.money += 10
+      self.bank -= 10
+    end
+  end
+
+  def self.win(players)
+    p 'Win:'
+    money = bank / players.count
+    players.each do |player|
+      p player.name
+      p player.money += money
+    end
+    self.bank = 0
+  end
+
+  def self.scores
+    scores = sessions.map(&:score)
+  end
+
+  def self.players_by_score(value)
+    sessions.map { |session| session.player if session.score == value }.compact
   end
 
   def choosing(steps)
-    p "#{player.name}, please choose:"
+    info
+    p "#{player.name}, please choose the step:"
     steps.each { |step| p "#{step} - #{Game::STEPS[step]}" }
-    choose = gets.chomp
-    player.add_card
-    p player.cards_names
-    p player.cards_points
-    p player.points
+    step = gets.chomp
+    return if step == '' || step == 'next'
+
+    send step
+    info
+  end
+
+  def taking
+    p "#{player.name}, you are taking a card..."
+    player.add_card(Card.new)
+    self.score = Card.calc(player.cards_points)
     sleep(1)
   end
 
-  #  def new_card
-  #   raise 'You can not take over 3 cards!' if @@cards.count == 3
-
-  #   add_card
-  # end
-
-  # def open_cards
-
-  # end
-
-  #   loop do
-  #     [user, dealer].each do |player|
-  #       choosing_for(player)
-  #       raise 'You lose' if player.over
-  #     end
-  #   end
-  # rescue => e
-  #   p e.message
-  #   winner
-  #   again?
-  # end
-
-  # def winner
-  #   if user.sum == dealer.sum
-  #     @user.money += @bank / 2
-  #     @dealer.money += @bank / 2
-  #   elsif user.sum > dealer.sum
-  #     @user.money += Main.bank
-  #   else
-  #     @dayler.money += Main.bank
-  #   end
-  # end
-end
-
-# UserGame < Game
-class UserGame < Game
-  define_steps
-
-  def initialize
-    p 'Hello! what is your name?'
-    super(User.new(gets))
+  def opening
+    Game.sessions.each { |session| info(session, { show: true } ) }
+    Game.analize
   end
 
-  def choosing
-    steps = self.class.steps
-    steps -= ['take'] if player.cards.count > 3
-    super(steps)
+  def info(session = self, *args)
+    player = session.player
+    p "#{player.name}, your cards:"
+    p player.cards_names(args[0])
+    p session.score if args[0] and args[0][:show]
+    sleep(2)
   end
 end
-
-# DealerGame < Game
-class DealerGame < Game
-  define_steps delete: 'open'
-
-  def initialize
-    super(Dealer.new)
-  end
-
-  def choosing
-    steps = self.class.steps
-    steps -= ['next'] if player.points < 17
-    steps -= ['take'] if player.points > 18
-    super(steps) unless steps.nil?
-  end
-end
-
-user_game = UserGame.new
-dealer_game = DealerGame.new
-# loop
-user_game.choosing
-dealer_game.choosing
-# rescue
-# init
-exit
