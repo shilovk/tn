@@ -49,7 +49,7 @@ class Game
       max = scores.max
       max = (scores - [max]).max if max > 21
       winners = Game.players_by_score(max)
-      winners ? win(winners) : no_win
+      winners ? win(winners, max) : no_win
       raise Interface.info_game_over
     end
     
@@ -58,17 +58,17 @@ class Game
       sessions.each do |session|
         session.player.money += 10
         self.bank -= 10
-        Interface.show_players(session.player)
+        Interface.show_player(sesion.player, cards: session.player.cards_names(show: true), score: session.score)
       end
     end
 
-    def win(players)
+    def win(players, score)
       Interface.show_winners
       money = bank / players.count
       players.each do |player|
         player.money += money
+        Interface.show_player(player, cards: player.cards_names(show: true), score: score)
       end
-      Interface.show_players(players)
       self.bank = 0
     end
 
@@ -82,10 +82,10 @@ class Game
   end
 
   def choosing(steps)
-    step = Interface.choose_step(steps, player, player.cards_names)
+    step = Interface.choose_step(steps, player, cards: player.cards_names)
     return if step == '' || step == 'next'
     send step
-    Interface.show_players(player, player.cards_names)
+    Interface.show_player(player, cards: player.cards_names)
   end
 
   def taking
@@ -96,7 +96,7 @@ class Game
 
   def opening
     Game.sessions.each do |session|
-      Interface.show_players(session.player, session.player.cards_names(hide: false), session.score)
+      Interface.show_player(session.player, cards: session.player.cards_names(show: true), score: session.score)
     end
     Game.analize
   end

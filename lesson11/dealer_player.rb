@@ -15,7 +15,8 @@ class Dealer < Player
   end
 
   def cards_names(*args)
-    return super() if args[0] && args[0][:show]
+    args = args.flatten[0] || {}
+    return super() if args[:show]
 
     cards.map { '*' }
   end

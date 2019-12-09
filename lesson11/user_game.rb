@@ -7,8 +7,7 @@ class UserGame < Game
   define_steps
 
   def initialize(name = nil)
-    name ||= Inerface.get_user_name
-    super(User.new(name))
+    super(User.new(name || Inerface.get_user_name))
   end
 
   def choosing
