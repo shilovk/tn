@@ -82,23 +82,16 @@ class Game
   end
 
   def choosing(steps)
-    Interface.show_players(player, player.cards_names)
-
-    p "#{player.name}, please choose the step:"
-    steps.each { |step| p "#{step} - #{Game::STEPS[step]}" }
-    step = gets.chomp
+    step = Interface.choose_step(steps, player, player.cards_names)
     return if step == '' || step == 'next'
-
     send step
-
     Interface.show_players(player, player.cards_names)
   end
 
   def taking
-    p "#{player.name}, you are taking a card..."
+    Interface.show_taking(player.name)
     player.add_card(Card.new)
     self.score = Card.calc(player.cards_points)
-    sleep(1)
   end
 
   def opening

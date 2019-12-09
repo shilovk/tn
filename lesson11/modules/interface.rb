@@ -17,6 +17,18 @@ module Interface
     exit
   end
 
+  def show_taking(name)
+    p "#{name}, you are taking a card..."
+    sleep(1)
+  end
+
+  def choose_step(steps, player, cards)
+    show_players(player, cards)
+    p "#{player.name}, please choose the step:"
+    steps.each { |step| p "#{step} - #{Game::STEPS[step]}" }
+    gets.chomp
+  end
+
   def info_game_over
     'Gave Over'
   end
@@ -31,10 +43,11 @@ module Interface
 
   def show_players(players = [], cards = [], score = nil)
     [players].flatten.each do |player|
-      p player.name
-      p player.money
+      10.times { p '-' }
+      p "player: #{player.name}"
+      p "money: #{player.money}"
       p "cards: #{cards.join(' ')}" unless cards.empty?
-      p "score #{score}" if score
+      p "score: #{score}" if score
     end
     sleep(2)
   end
