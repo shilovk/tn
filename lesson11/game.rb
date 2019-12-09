@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'modules/interface'
 require_relative 'modules/game_mixin'
 require_relative 'user_player'
 require_relative 'dealer_player'
@@ -29,10 +30,7 @@ class Game
     loop do
       sessions.each { |session| session.choosing }
     rescue => e
-      p e.message
-      p 'Play next? y - yes'
-      play if gets.chomp == 'y'
-      exit
+      play if Interface.play_next?(e)
     end
   end
 
@@ -46,49 +44,54 @@ class Game
 
   protected
 
-  def self.analize
-    max = scores.max
-    max = (scores - [max]).max if max > 21
-    winners = Game.players_by_score(max)
-    winners ? win(winners) : no_win
-    raise 'Gave Over'
-  end
-  
-  def self.no_win
-    p 'No winners'
-    sessions.each do |session|
-      session.player.money += 10
-      self.bank -= 10
+  class << self 
+    def analize
+      max = scores.max
+      max = (scores - [max]).max if max > 21
+      winners = Game.players_by_score(max)
+      winners ? win(winners) : no_win
+      raise Interface.info_game_over
     end
-  end
-
-  def self.win(players)
-    p 'Win:'
-    money = bank / players.count
-    players.each do |player|
-      p player.name
-      p player.money += money
+    
+    def no_win
+      Interface.show_no_winners
+      sessions.each do |session|
+        session.player.money += 10
+        self.bank -= 10
+        Interface.show_players(session.player)
+      end
     end
-    self.bank = 0
-  end
 
-  def self.scores
-    scores = sessions.map(&:score)
-  end
+    def win(players)
+      Interface.show_winners
+      money = bank / players.count
+      players.each do |player|
+        player.money += money
+      end
+      Interface.show_players(players)
+      self.bank = 0
+    end
 
-  def self.players_by_score(value)
-    sessions.map { |session| session.player if session.score == value }.compact
+    def scores
+      scores = sessions.map(&:score)
+    end
+
+    def players_by_score(value)
+      sessions.map { |session| session.player if session.score == value }.compact
+    end
   end
 
   def choosing(steps)
-    info
+    Interface.show_players(player, player.cards_names)
+
     p "#{player.name}, please choose the step:"
     steps.each { |step| p "#{step} - #{Game::STEPS[step]}" }
     step = gets.chomp
     return if step == '' || step == 'next'
 
     send step
-    info
+
+    Interface.show_players(player, player.cards_names)
   end
 
   def taking
@@ -99,15 +102,9 @@ class Game
   end
 
   def opening
-    Game.sessions.each { |session| info(session, { show: true } ) }
+    Game.sessions.each do |session|
+      Interface.show_players(session.player, session.player.cards_names(hide: false), session.score)
+    end
     Game.analize
-  end
-
-  def info(session = self, *args)
-    player = session.player
-    p "#{player.name}, your cards:"
-    p player.cards_names(args[0])
-    p session.score if args[0] and args[0][:show]
-    sleep(2)
   end
 end
