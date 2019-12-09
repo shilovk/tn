@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-# GameMixin
-module GameMixin
-  STEPS = { 'next' => 'next step', 'taking' => 'take card', 'opening' => 'open cards' }.freeze
+# Steps
+module Steps
+  STEPS = %w[next taking opening].freeze
 
   def self.included(base)
     base.extend ClassMethods
@@ -15,7 +15,7 @@ module GameMixin
     end
 
     def define_steps(args = {})
-      @steps = GameMixin::STEPS.keys
+      @steps = [Steps::STEPS].flatten
       @steps.delete(args[:delete])
     end
   end

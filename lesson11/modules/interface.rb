@@ -23,6 +23,7 @@ module Interface
     p 'Play next? y - yes'
     return true if gets.chomp == 'y'
 
+    puts 'exit'
     exit
   end
 
@@ -36,7 +37,7 @@ module Interface
   def choose_step(steps, player, *args)
     show_player(player, args)
     p "#{player.name}, please choose the step:"
-    steps.each { |step| p "#{step} - #{Game::STEPS[step]}" }
+    steps.each { |step| p "#{step} - step '#{step}'" }
     gets.chomp
   end
 
