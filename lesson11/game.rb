@@ -28,6 +28,7 @@ class Game
   def self.play
     @deck = Deck.new
     sessions.each(&:init)
+
     loop { sessions.each(&:choosing) }
   rescue StandardError => e
     play if Interface.play_next?(e)
@@ -82,13 +83,28 @@ class Game
         session.player if session.score == value
       end.compact
     end
+
+    def three_cards?
+      count = sessions.inject(0) do |sum, session|
+        sum += 1 if session.player.cards.count == 3; sum
+      end
+      count == sessions.count
+    end
   end
 
   def choosing(steps)
-    step = Interface.choose_step(steps, player, cards: player.cards_names)
-    return if ['', 'next'].include? step
+    return run_step('opening') if Game.three_cards?
 
-    send step
+    step = if player.user?
+      Interface.choose_step(steps, player, cards: player.cards_names)
+    else
+      steps.first
+    end
+    steps.include?(step) ? run_step(step) : choosing
+  end
+
+  def run_step(step)
+    send step unless step == 'next'
     Interface.show_player(player, cards: player.cards_names)
   end
 

@@ -45,6 +45,10 @@ module Interface
     'Gave Over'
   end
 
+  def info_three_cards
+    'All players have three cards'
+  end
+
   def show_winners
     puts
     p 'Winners:'
