@@ -4,7 +4,7 @@ require_relative 'modules/interface'
 require_relative 'modules/steps'
 require_relative 'user_player'
 require_relative 'dealer_player'
-require_relative 'card'
+require_relative 'deck'
 
 # Game
 class Game
@@ -13,7 +13,7 @@ class Game
   @bank = 0
   @sessions = []
   class << self
-    attr_accessor :bank, :sessions
+    attr_accessor :bank, :sessions, :deck
   end
 
   attr_accessor :score
@@ -26,6 +26,7 @@ class Game
   end
 
   def self.play
+    @deck = Deck.new
     sessions.each(&:init)
     loop { sessions.each(&:choosing) }
   rescue StandardError => e
@@ -93,7 +94,7 @@ class Game
 
   def taking
     Interface.show_taking(player.name)
-    player.add_card(Card.new)
+    player.add_card(Game.deck.take_card)
     self.score = Card.calc(player.cards_points)
   end
 

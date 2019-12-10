@@ -8,12 +8,6 @@ module CardsGenerate
 
   module_function
 
-  def cards
-    TYPES.each_with_object([]) do |type, memo|
-      NAMES.each { |name| memo << "#{name}#{type}" }
-    end
-  end
-
   def cards_values
     TYPES.each_with_object({}) do |type, memo|
       NAMES.each_with_index { |name, i| memo["#{name}#{type}"] = VALUES[i] }

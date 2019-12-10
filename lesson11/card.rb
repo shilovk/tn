@@ -1,14 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'modules/cards_generate'
-
 # Card
 class Card
-  attr_reader :card, :point
-  alias name card
-
-  @@cards = CardsGenerate.cards
-  @@cards_values = CardsGenerate.cards_values
+  attr_accessor :name, :point
+  # alias name card
 
   class << self
     def names(cards)
@@ -31,9 +26,8 @@ class Card
     end
   end
 
-  def initialize
-    @card = @@cards[rand(@@cards.size)]
-    @point = @@cards_values[@card]
-    @@cards.delete(@card)
+  def initialize(name, point)
+    @name = name
+    @point = point
   end
 end

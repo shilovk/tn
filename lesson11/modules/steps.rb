@@ -10,9 +10,7 @@ module Steps
 
   # ClassMethods
   module ClassMethods
-    def steps
-      @steps
-    end
+    attr_reader :steps
 
     def define_steps(args = {})
       @steps = [Steps::STEPS].flatten
