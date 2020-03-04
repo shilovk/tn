@@ -1,9 +1,15 @@
 class App
   def call(_env)
+    # p self.class
+    perform_request
     [status, headers, body]
   end
 
   private
+
+  def perform_request
+    sleep rand(2..3)
+  end
 
   def status
     200

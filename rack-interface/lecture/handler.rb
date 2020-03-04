@@ -1,6 +1,5 @@
-# gem install rack
-
 require 'rack'
+require 'rack/handler/puma'
 
 app = proc do |_env|
   [
@@ -10,7 +9,7 @@ app = proc do |_env|
   ]
 end
 
-Rack::Handler::WEBrick.run app
+Rack::Handler::Puma.run app
 
 # ruby hander.rb
 # curl --url "http://localhost:8080/" -i
