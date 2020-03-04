@@ -1,6 +1,14 @@
-class App
+class RequestParams
+  def initialize(app)
+    @app = app
+  end
+
   def call(env)
     @formatter = FormatTime.new(env['QUERY_STRING'])
+
+    return [status, headers, body] unless @formatter.valid?
+
+    status, headers, body = @app.call(env)
 
     [status, headers, body]
   end
@@ -8,7 +16,7 @@ class App
   private
 
   def status
-    200
+    400
   end
 
   def headers
@@ -16,6 +24,6 @@ class App
   end
 
   def body
-    ["#{@formatter.time}\n"]
+    ["#{@formatter.invalid_formats}\n"]
   end
 end

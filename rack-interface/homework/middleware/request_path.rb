@@ -4,7 +4,7 @@ class RequestPath
   end
 
   def call(env)
-    return bad_request_path_answer if env['REQUEST_PATH'] != Settings::ALLOW_PATH
+    return [status, headers, body] if env['REQUEST_PATH'] != Settings::ALLOW_PATH
 
     status, headers, body = @app.call(env)
 
@@ -13,7 +13,15 @@ class RequestPath
 
   private
 
-  def bad_request_path_answer
-    [404, { 'Content-Type' => 'text/plain' }, []]
+  def status
+    404
+  end
+
+  def headers
+    { 'Content-Type' => 'text/plain' }
+  end
+
+  def body
+    []
   end
 end
