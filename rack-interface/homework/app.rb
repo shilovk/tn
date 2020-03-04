@@ -15,6 +15,8 @@ class App
   private
 
   def status
+    return 404 unless request_path_correct?
+
     request_correct? ? 200 : 400
   end
 
