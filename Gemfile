@@ -5,6 +5,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem 'bundler'
 gem 'logger'
-gem 'rack'
 gem 'puma'
+gem 'rack'
 gem 'rubocop', require: false
