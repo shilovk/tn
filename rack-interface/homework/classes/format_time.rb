@@ -3,9 +3,15 @@ class FormatTime
     parse_string(format_string)
   end
 
+  def output
+    valid? ? time : invalid_formats
+  end
+
   def valid?
     correct_formats.any? && bad_formats.empty?
   end
+
+  private
 
   def time
     correct_formats.map { |value| DateTime.now.send(value) }.join('-')
@@ -14,8 +20,6 @@ class FormatTime
   def invalid_formats
     "Unknown time format [#{bad_formats.join(', ')}]"
   end
-
-  private
 
   def parse_string(format_string)
     @parsed_string = Rack::Utils.parse_nested_query(format_string)[Settings::ALLOW_PARAM]

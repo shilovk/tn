@@ -1,6 +1,6 @@
 class App
-  def call(env)
-    @formatter = FormatTime.new(env['QUERY_STRING'])
+  def call(_env, formatter)
+    @formatter = formatter
 
     [status, headers, body]
   end
@@ -16,6 +16,6 @@ class App
   end
 
   def body
-    ["#{@formatter.time}\n"]
+    ["#{@formatter.output}\n"]
   end
 end
