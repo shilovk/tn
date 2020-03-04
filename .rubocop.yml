@@ -76,17 +76,20 @@ AllCops:
 # Style/AsciiComments:
 #   Enabled: false
 
-# Style/Documentation:
-#   Enabled: false
+Style/Documentation:
+  Enabled: false
 
-# Metrics/LineLength:
-#   Enabled: false
-
-# Metrics/MethodLength:
-#   Enabled: false
+Metrics/LineLength:
+  Max: 100
 
 Style/ClassVars:
   Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# Metrics/MethodLength:
+#   Enabled: false
 
 # Metrics/AbcSize:
 #   Enabled: false
@@ -99,3 +102,4 @@ Style/ClassVars:
 
 # Lint/ParenthesesAsGroupedExpression:
 #   Enabled: false
+

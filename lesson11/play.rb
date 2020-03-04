@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'pry'
+require 'byebug'
 require_relative 'user_game'
 require_relative 'dealer_game'
 

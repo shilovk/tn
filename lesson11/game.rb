@@ -86,7 +86,8 @@ class Game
 
     def three_cards?
       count = sessions.inject(0) do |sum, session|
-        sum += 1 if session.player.cards.count == 3; sum
+        sum += 1 if session.player.cards.count == 3
+        sum
       end
       count == sessions.count
     end
