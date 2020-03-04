@@ -1,5 +1,11 @@
+ALLOW_PATH = '/time'.freeze
+ALLOW_PARAM = 'format'.freeze
+ALLOW_VALUES = %w[year month day hour minute second].freeze
+
+require_relative 'middleware/request_path'
 require_relative 'app'
 
+use RequestPath
 run App.new
 
 # rackup

@@ -2,12 +2,7 @@ require 'rack'
 require 'rack/utils'
 
 class App
-  ALLOW_PATH = '/time'.freeze
-  ALLOW_PARAM = 'format'.freeze
-  ALLOW_VALUES = %w[year month day hour minute second].freeze
-
   def call(env)
-    @request_path = env['REQUEST_PATH']
     @query_string = env['QUERY_STRING']
     [status, headers, body]
   end
@@ -15,17 +10,11 @@ class App
   private
 
   def status
-    return 404 unless request_path_correct?
-
     request_correct? ? 200 : 400
   end
 
   def request_correct?
-    request_path_correct? && bad_query_values.empty?
-  end
-
-  def request_path_correct?
-    @request_path_correct = @request_path == ALLOW_PATH
+    bad_query_values.empty?
   end
 
   def correct_query_values
@@ -61,8 +50,6 @@ class App
   end
 
   def print_what_wrong
-    return '' unless request_path_correct?
-
     "Unknown time format [#{bad_query_values.join(', ')}]"
   end
 end
