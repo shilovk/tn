@@ -47,7 +47,11 @@ class App
   end
 
   def body
-    [request_correct? ? parse_time(DateTime.now) : print_what_wrong]
+    ["#{body_text}\n"]
+  end
+
+  def body_text
+    request_correct? ? parse_time(DateTime.now) : print_what_wrong
   end
 
   def parse_time(time_now)
