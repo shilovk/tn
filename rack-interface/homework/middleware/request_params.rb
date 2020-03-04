@@ -8,7 +8,7 @@ class RequestParams
 
     return [status, headers, body] unless @formatter.valid?
 
-    status, headers, body = @app.call(env, @formatter)
+    status, headers, body = @app.call(env, @formatter.output)
 
     [status, headers, body]
   end

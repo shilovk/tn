@@ -1,6 +1,6 @@
 class App
-  def call(_env, formatter)
-    @formatter = formatter
+  def call(_env, text)
+    @text = text
 
     [status, headers, body]
   end
@@ -16,6 +16,6 @@ class App
   end
 
   def body
-    ["#{@formatter.output}\n"]
+    ["#{@text}\n"]
   end
 end
