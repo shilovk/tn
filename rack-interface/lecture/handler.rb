@@ -2,7 +2,7 @@
 
 require 'rack'
 
-app = Proc.new do |env|
+app = proc do |_env|
   [
     200,
     { 'Content-Type' => 'text/plain' },

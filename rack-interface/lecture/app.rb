@@ -1,6 +1,5 @@
 class App
-
-  def call(env)
+  def call(_env)
     [status, headers, body]
   end
 
@@ -17,5 +16,4 @@ class App
   def body
     ["Welcome aboard!\n"]
   end
-
 end
