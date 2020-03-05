@@ -53,7 +53,7 @@ module Validation
   module InstanceMethods
     def valid?
       validate!
-    rescue
+    rescue StandardError
       false
     end
 
@@ -63,7 +63,7 @@ module Validation
       methods = public_methods.select { |name| name.to_s =~ /.*_is_(present|format|type)\?$/ }
       methods.each { |method| send method }
       'All variables valid'
-    rescue => e
+    rescue StandardError => e
       raise e.message
     end
   end
