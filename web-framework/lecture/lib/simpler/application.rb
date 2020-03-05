@@ -8,7 +8,7 @@ module Simpler
       [
         200,
         { 'Content-Type' => 'text/plain' },
-        ["Simpler fraimwork in action!\n"]
+        ["Simpler framework in action!\n"]
       ]
     end
   end
