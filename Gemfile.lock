@@ -23,6 +23,8 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
     ruby-progressbar (1.10.1)
+    sequel (5.30.0)
+    sqlite3 (1.4.2)
     unicode-display_width (1.6.1)
 
 PLATFORMS
@@ -35,6 +37,8 @@ DEPENDENCIES
   puma
   rack
   rubocop
+  sequel
+  sqlite3
 
 BUNDLED WITH
    2.1.4

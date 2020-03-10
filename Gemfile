@@ -9,3 +9,5 @@ gem 'logger'
 gem 'puma'
 gem 'rack'
 gem 'rubocop', require: false
+gem 'sequel'
+gem 'sqlite3'

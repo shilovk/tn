@@ -4,7 +4,7 @@
 class MyClass
   def method_missing(name, *args)
     self.class.send(:define_method, name.to_sym, -> { p args })
-  rescue
+  rescue StandardError
     super
   end
 

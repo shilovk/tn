@@ -97,9 +97,9 @@ class Game
     return run_step('opening') if Game.three_cards?
 
     step = if player.user?
-      Interface.choose_step(steps, player, cards: player.cards_names)
-    else
-      steps.first
+             Interface.choose_step(steps, player, cards: player.cards_names)
+           else
+             steps.first
     end
     steps.include?(step) ? run_step(step) : choosing
   end
