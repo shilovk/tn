@@ -6,5 +6,7 @@ sleep 2
 # curl --url localhost:9292/tests -v
 # curl --url localhost:9292/tests -v -X POST
 # curl --url localhost:9292/ -v
-curl --url localhost:9292/tests
+# curl --url localhost:9292/tests
+open 'http://localhost:9292'
+sleep 5
 pkill -f puma
