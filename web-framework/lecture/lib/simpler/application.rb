@@ -10,6 +10,11 @@ module Simpler
       @router = Router.new
     end
 
+    def bootstrap!
+      require_app
+      require_routes
+    end
+
     def call(env)
       route = @router.route_for(env)
       controller = route.controller.new(env)
@@ -22,6 +27,14 @@ module Simpler
     end
 
     private
+
+    def require_app
+      Dir["#{Simpler.root}/app/**/**.rb"].sort.each { |file| require file }
+    end
+
+    def require_routes
+      require Simpler.root.join('config/routes')
+    end
 
     def make_response(controller, action)
       controller.make_response(action)
